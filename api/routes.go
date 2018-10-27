@@ -5,7 +5,6 @@ import (
 	"net/http"
 	"net/rpc"
 
-	"github.com/davecgh/go-spew/spew"
 	"github.com/minhajuddinkhan/reviewzone/comments"
 )
 
@@ -19,7 +18,6 @@ func TestRoute(readerService, dumpService, cmtService *rpc.Client) func(w http.R
 			panic(err)
 		}
 
-		spew.Dump(csvs)
 		var csvIDs []string
 		dumpService.Call("Service.DumpCSV", csvs, &csvIDs)
 
@@ -35,7 +33,6 @@ func TestRoute(readerService, dumpService, cmtService *rpc.Client) func(w http.R
 
 		var comments []comments.Comment
 		cmtService.Call("Service.GetComments", csvIDs[0], &comments)
-		spew.Dump(comments)
 		w.Write([]byte(csvs[0][0]))
 		w.WriteHeader(http.StatusOK)
 	}
