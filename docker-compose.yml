@@ -10,14 +10,14 @@ services:
     comments:
         build: './comments'
         volumes:
-            - .:/go/src/github.com/minhajuddinkhan/reviewzone/reviewer
+            - .:/go/src/github.com/minhajuddinkhan/reviewzone/comments
         ports:
             - 3000:3000
 
     dump:
         build: './dump'
         volumes:
-            - .:/go/src/github.com/minhajuddinkhan/reviewzone/reviewer
+            - .:/go/src/github.com/minhajuddinkhan/reviewzone/dump
         ports:
             - 4000:4000
 
