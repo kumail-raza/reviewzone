@@ -1,16 +1,11 @@
 FROM golang:1.10.0
-
-# Copy the local package files to the container's workspace.
-ADD . /go/src/github.com/minhajuddinkhan/reviewzone/api
-WORKDIR /go/src/github.com/minhajuddinkhan/reviewzone/api
-# Build the outyet command inside the container.
-# (You may fetch or manage dependencies here,
-# either manually or with a tool like "godep".)
-RUN go get
-RUN go install github.com/minhajuddinkhan/reviewzone/api/bin/api
+RUN curl https://raw.githubusercontent.com/golang/dep/master/install.sh | sh
+WORKDIR /go/src/github.com/minhajuddinkhan/reviewzone
 
 
-# Run the outyet command by default when the container starts.
+COPY . .
+RUN dep ensure -v
+RUN go install github.com/minhajuddinkhan/reviewzone/api/...
 ENTRYPOINT /go/bin/api
 
 # Document that the service listens on port 8080.
