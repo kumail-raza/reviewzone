@@ -1,4 +1,7 @@
 mongodb:
-        image: mongo:latest
-        ports:
-            - 27017:27017
+    image: mongo:latest
+    ports:
+        - 27017:27017
+services:
+    comments:
+        build: './comments'
