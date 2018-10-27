@@ -7,30 +7,22 @@ services:
 
     comments:
         build: './comments'
-        ports:
-            - 3000:3000
-
         volumes: 
             - ./comments:/go/src/github.com/minhajuddinkhan/reviewzone/comments
 
     dump:
         build: './dump'
-        ports:
-            - 4000:4000
         volumes: 
             - ./dump:/go/src/github.com/minhajuddinkhan/reviewzone/dump
- 
+
     reviewer:
         build: './reviewer'
         volumes: 
             - ./reviewer:/go/src/github.com/minhajuddinkhan/reviewzone/reviewer
-        ports:
-            - 5000:5000
-
     api:
         build: '.'
-        volumes: 
-            - ./api:/go/src/github.com/minhajuddinkhan/reviewzone/api
+        volumes:
+          - .:/go/src/github.com/minhajuddinkhan/reviewzone 
         depends_on:
             - comments
             - dump
