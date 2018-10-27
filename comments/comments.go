@@ -7,13 +7,6 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
-//Comment Comment
-type Comment struct {
-	ID      bson.ObjectId `json:"id" bson:"_id,omitempty"`
-	Comment string
-	CsvID   bson.ObjectId
-}
-
 const (
 	collection = "comments"
 )
