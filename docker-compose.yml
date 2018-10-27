@@ -24,3 +24,10 @@ services:
             - .:/go/src/github.com/minhajuddinkhan/reviewzone/reviewer
         ports:
             - 5000:5000
+
+    api:
+        build: './api'
+        volumes:
+            - ../:/go/src/github.com/minhajuddinkhan/reviewzone/api
+        ports:
+            - 5000:5000
