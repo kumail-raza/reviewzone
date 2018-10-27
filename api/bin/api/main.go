@@ -42,7 +42,7 @@ func main() {
 	defer cmtService.Close()
 	defer readerService.Close()
 
-	http.HandleFunc("/go", api.TestRoute(readerService, dumpService, cmtService))
+	http.HandleFunc("/go11", api.TestRoute(readerService, dumpService, cmtService))
 
 	log.Fatal(http.ListenAndServe(":6000", nil))
 

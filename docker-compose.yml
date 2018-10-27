@@ -29,6 +29,8 @@ services:
 
     api:
         build: '.'
+        volumes: 
+            - ./api:/go/src/github.com/minhajuddinkhan/reviewzone/api
         depends_on:
             - comments
             - dump
