@@ -15,7 +15,7 @@ var (
 	dbName             = "reviewzone"
 	dbUserName         = getDBUser()
 	dbPassword         = getDBPassword()
-	dbConnectionString = fmt.Sprintf("localhost:27017")
+	dbConnectionString = fmt.Sprintf("mongo:27017")
 	collection         = "csv"
 )
 
@@ -79,7 +79,7 @@ func (d *Dumper) readWithComments(csvID string) (FormatWithComments, error) {
 	errCh := make(chan error)
 
 	go func() {
-		service, err := rpc.DialHTTP("tcp", "localhost:3000")
+		service, err := rpc.DialHTTP("tcp", "comments:3000")
 		if err != nil {
 			errCh <- err
 			log.Fatal(err)
