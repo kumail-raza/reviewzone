@@ -10,6 +10,13 @@ import (
 	"github.com/globalsign/mgo"
 )
 
+var (
+	dbName             = "reviewzone"
+	dbUserName         = getDBUser()
+	dbPassword         = getDBPassword()
+	dbConnectionString = fmt.Sprintf("mongo:27017")
+)
+
 func getDBUser() string {
 	user := os.Getenv("MONGODB_USER")
 	if len(user) == 0 {
@@ -30,7 +37,7 @@ func (d *Dumper) connectDB() (*mgo.Session, error) {
 
 	sessionCh := make(chan *mgo.Session)
 	errCh := make(chan error)
-	ctx, cancel := context.WithTimeout(context.Background(), 1*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 3*time.Second)
 	defer cancel()
 
 	go func() {

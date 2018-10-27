@@ -11,12 +11,8 @@ import (
 	"github.com/globalsign/mgo/bson"
 )
 
-var (
-	dbName             = "reviewzone"
-	dbUserName         = getDBUser()
-	dbPassword         = getDBPassword()
-	dbConnectionString = fmt.Sprintf("mongo:27017")
-	collection         = "csv"
+const (
+	collection = "csv"
 )
 
 //Dumper Dumper
