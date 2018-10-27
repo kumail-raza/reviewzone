@@ -28,6 +28,6 @@ services:
     api:
         build: './api'
         volumes:
-            - ../:/go/src/github.com/minhajuddinkhan/reviewzone/api
+            - ./:/go/src/github.com/minhajuddinkhan/reviewzone/api
         ports:
             - 5000:5000
