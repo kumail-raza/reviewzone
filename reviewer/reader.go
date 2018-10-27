@@ -6,7 +6,7 @@ import (
 )
 
 //ReadCSVFile ReadCSVFile
-func (r *Reviewer) ReadCSVFile(path string) ([][]string, error) {
+func (r *Reviewer) readCSVFile(path string) ([][]string, error) {
 
 	file, err := os.Open(path)
 	if err != nil {

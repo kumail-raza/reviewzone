@@ -3,20 +3,21 @@ package dump
 import (
 	"fmt"
 
+	"github.com/davecgh/go-spew/spew"
+
 	"github.com/globalsign/mgo/bson"
 )
 
 //Format Format
 type Format struct {
-	Serial   string
-	Name     string
-	Details  string
-	ID       bson.ObjectId
-	Comments []string
+	ID      bson.ObjectId `json:"id" bson:"_id,omitempty"`
+	Serial  string
+	Name    string
+	Details string
 }
 
 var (
-	dbName             = "test"
+	dbName             = "reviewzone"
 	dbUserName         = getDBUser()
 	dbPassword         = getDBPassword()
 	dbConnectionString = fmt.Sprintf("localhost:27017")
@@ -26,16 +27,17 @@ var (
 type Dumper struct{}
 
 //DumpCSV DumpCSV
-func (d *Dumper) DumpCSV(csvs [][]string) ([]string, error) {
+func (d *Dumper) dumpCSV(csvs [][]string) ([]string, error) {
 
-	session, err := d.ConnectDB()
+	session, err := d.connectDB()
 	if err != nil {
 		return nil, err
 	}
 	c := session.DB(dbName).C("csv")
 	var ids []string
 	for _, row := range csvs {
-		f := Format{Serial: row[0], ID: bson.NewObjectId()}
+		spew.Dump(row)
+		f := Format{Serial: row[0], Name: row[1], ID: bson.NewObjectId()}
 		err := c.Insert(f)
 		if err != nil {
 			return nil, err

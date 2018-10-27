@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	dbName             = "test"
+	dbName             = "reviewzone"
 	dbUserName         = getDBUser()
 	dbPassword         = getDBPassword()
 	dbConnectionString = fmt.Sprintf("localhost:27017")

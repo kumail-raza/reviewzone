@@ -26,8 +26,7 @@ func getDBPassword() string {
 	return pwd
 }
 
-//ConnectDB ConnectDB
-func (d *Dumper) ConnectDB() (*mgo.Session, error) {
+func (d *Dumper) connectDB() (*mgo.Session, error) {
 
 	sessionCh := make(chan *mgo.Session)
 	errCh := make(chan error)

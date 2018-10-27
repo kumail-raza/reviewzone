@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	DBName             = "test"
+	dBName             = "reviewzone"
 	dbUserName         = getDBUser()
 	dbPassword         = getDBPassword()
 	dbConnectionString = fmt.Sprintf("localhost:27017")
@@ -34,7 +34,7 @@ func getDBPassword() string {
 }
 
 //ConnectDB ConnectDB
-func (c *Comments) ConnectDB() (*mgo.Session, error) {
+func (c *Comment) ConnectDB() (*mgo.Session, error) {
 
 	sessionCh := make(chan *mgo.Session)
 	errCh := make(chan error)
@@ -43,7 +43,7 @@ func (c *Comments) ConnectDB() (*mgo.Session, error) {
 
 	go func() {
 		fmt.Println(dbConnectionString)
-		session, err := mgo.Dial(dbConnectionString + "/" + DBName)
+		session, err := mgo.Dial(dbConnectionString + "/" + dBName)
 		if err != nil {
 			errCh <- err
 		}
