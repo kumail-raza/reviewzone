@@ -9,28 +9,20 @@ services:
 
     comments:
         build: './comments'
-        volumes:
-            - .:/go/src/github.com/minhajuddinkhan/reviewzone/comments
         ports:
             - 3000:3000
 
     dump:
         build: './dump'
-        volumes:
-            - .:/go/src/github.com/minhajuddinkhan/reviewzone/dump
         ports:
             - 4000:4000
 
     reviewer:
         build: './reviewer'
-        volumes:
-            - .:/go/src/github.com/minhajuddinkhan/reviewzone/reviewer
         ports:
             - 5000:5000
 
     api:
         build: './api'
-        volumes:
-            - ./:/go/src/github.com/minhajuddinkhan/reviewzone/api
         ports:
             - 5000:5000
