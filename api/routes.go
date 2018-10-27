@@ -13,7 +13,7 @@ func TestRoute(readerService, dumpService, cmtService *rpc.Client) func(w http.R
 
 	return func(w http.ResponseWriter, r *http.Request) {
 		var csvs [][]string
-		err := readerService.Call("Service.ReadCSVFile", "/tmp/text.csv", &csvs)
+		err := readerService.Call("Service.ReadCSVFile", "text.csv", &csvs)
 		if err != nil {
 			panic(err)
 		}
@@ -34,6 +34,5 @@ func TestRoute(readerService, dumpService, cmtService *rpc.Client) func(w http.R
 		var comments []comments.Comment
 		cmtService.Call("Service.GetComments", csvIDs[0], &comments)
 		w.Write([]byte(csvs[0][0]))
-		w.WriteHeader(http.StatusOK)
 	}
 }

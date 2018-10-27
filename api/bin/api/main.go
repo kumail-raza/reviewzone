@@ -10,11 +10,11 @@ import (
 
 const (
 	//CommentsAddr CommentsAddr
-	CommentsAddr = "comments:3000"
+	CommentsAddr = "localhost:3000"
 	//DumpAddr DumpAddr
-	DumpAddr = "dump:4000"
+	DumpAddr = "localhost:4000"
 	//ReaderAddr ReaderAddr
-	ReaderAddr = "reviewer:5000"
+	ReaderAddr = "localhost:5000"
 )
 
 func getService(addr string) *rpc.Client {

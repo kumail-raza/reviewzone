@@ -30,6 +30,7 @@ type Dumper struct{}
 func (d *Dumper) dumpCSV(csvs [][]string) ([]string, error) {
 
 	session, err := d.connectDB()
+	defer session.Close()
 	if err != nil {
 		return nil, err
 	}
