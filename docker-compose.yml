@@ -1,7 +1,17 @@
-mongodb:
-    image: mongo:latest
-    ports:
-        - 27017:27017
+version: '3.3'
+
+
 services:
+    mongodb:
+        image: mongo:latest
+        ports:
+            - 27017:27017
+
     comments:
         build: './comments'
+
+    dump:
+        build: './dump'
+
+    reviewer:
+        build: './reviewer'
