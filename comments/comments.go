@@ -2,6 +2,7 @@ package comments
 
 import (
 	"errors"
+	"fmt"
 
 	"github.com/globalsign/mgo/bson"
 )
@@ -68,6 +69,7 @@ func (c *Comment) getComments(csvID string) ([]Comment, error) {
 	defer s.Close()
 
 	var comments []Comment
+	fmt.Println("incoming", csvID)
 
 	err = s.DB(dBName).C(collection).Find(bson.M{"csvid": bson.ObjectIdHex(csvID)}).All(&comments)
 	if err != nil {

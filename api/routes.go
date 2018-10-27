@@ -1,10 +1,12 @@
 package api
 
 import (
+	"encoding/json"
 	"log"
 	"net/http"
 	"net/rpc"
 
+	boom "github.com/darahayes/go-boom"
 	"github.com/minhajuddinkhan/reviewzone/comments"
 )
 
@@ -35,4 +37,15 @@ func TestRoute(readerService, dumpService, cmtService *rpc.Client) func(w http.R
 		cmtService.Call("Service.GetComments", csvIDs[0], &comments)
 		w.Write([]byte(csvs[0][0]))
 	}
+}
+
+func Respond(w http.ResponseWriter, i interface{}) {
+	w.Header().Set("content-type", "application/json")
+	encoder := json.NewEncoder(w)
+	err := encoder.Encode(i)
+	if err != nil {
+		boom.Internal(w, err)
+		return
+	}
+
 }

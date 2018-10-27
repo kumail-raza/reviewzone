@@ -3,8 +3,6 @@ package dump
 import (
 	"fmt"
 
-	"github.com/davecgh/go-spew/spew"
-
 	"github.com/globalsign/mgo/bson"
 )
 
@@ -20,7 +18,7 @@ var (
 	dbName             = "reviewzone"
 	dbUserName         = getDBUser()
 	dbPassword         = getDBPassword()
-	dbConnectionString = fmt.Sprintf("mongodb:27017")
+	dbConnectionString = fmt.Sprintf("localhost:27017")
 )
 
 //Dumper Dumper
@@ -30,14 +28,14 @@ type Dumper struct{}
 func (d *Dumper) dumpCSV(csvs [][]string) ([]string, error) {
 
 	session, err := d.connectDB()
-	defer session.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer session.Close()
+
 	c := session.DB(dbName).C("csv")
 	var ids []string
 	for _, row := range csvs {
-		spew.Dump(row)
 		f := Format{Serial: row[0], Name: row[1], ID: bson.NewObjectId()}
 		err := c.Insert(f)
 		if err != nil {

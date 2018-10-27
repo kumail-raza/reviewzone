@@ -5,16 +5,18 @@ import (
 	"net/http"
 	"net/rpc"
 
+	"github.com/gorilla/mux"
+
 	"github.com/minhajuddinkhan/reviewzone/api"
 )
 
 const (
 	//CommentsAddr CommentsAddr
-	CommentsAddr = "comments:3000"
+	CommentsAddr = "localhost:3000"
 	//DumpAddr DumpAddr
-	DumpAddr = "dump:4000"
+	DumpAddr = "localhost:4000"
 	//ReaderAddr ReaderAddr
-	ReaderAddr = "reviewer:5000"
+	ReaderAddr = "localhost:5000"
 )
 
 func getService(addr string) *rpc.Client {
@@ -34,16 +36,27 @@ func main() {
 	go func() { d <- getService(DumpAddr) }()
 	go func() { r <- getService(ReaderAddr) }()
 
-	cmtService := <-c
-	dumpService := <-d
-	readerService := <-r
-
-	defer dumpService.Close()
+	var cmtService, dumpService, readerService *rpc.Client
+	for i := 0; i < 3; i++ {
+		select {
+		case service := <-c:
+			cmtService = service
+		case service := <-d:
+			dumpService = service
+		case service := <-r:
+			readerService = service
+		}
+	}
 	defer cmtService.Close()
+	defer dumpService.Close()
 	defer readerService.Close()
 
-	http.HandleFunc("/go", api.TestRoute(readerService, dumpService, cmtService))
+	rt := mux.NewRouter()
+	rt.HandleFunc("/comments", api.PostComments(cmtService)).Methods("POST")
+	rt.HandleFunc("/comments", api.GetComments(cmtService)).Methods("GET")
+	rt.HandleFunc("/csvs", api.ReadCSV(readerService)).Methods("GET")
+	rt.HandleFunc("/dump", api.DumpCSV(readerService, dumpService)).Methods("GET")
 
-	log.Fatal(http.ListenAndServe(":6000", nil))
+	log.Fatal(http.ListenAndServe(":6000", rt))
 
 }
