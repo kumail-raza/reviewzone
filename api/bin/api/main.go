@@ -44,6 +44,6 @@ func main() {
 
 	http.HandleFunc("/go", api.TestRoute(readerService, dumpService, cmtService))
 
-	http.ListenAndServe(":6000", nil)
+	log.Fatal(http.ListenAndServe(":6000", nil))
 
 }
