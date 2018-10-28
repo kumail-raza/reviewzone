@@ -14,7 +14,7 @@ var (
 	dBName             = "reviewzone"
 	dbUserName         = getDBUser()
 	dbPassword         = getDBPassword()
-	dbConnectionString = fmt.Sprintf("mongo:27017")
+	dbConnectionString = fmt.Sprintf("mongodb:27017")
 )
 
 func getDBUser() string {
