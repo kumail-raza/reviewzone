@@ -9,8 +9,12 @@ WORKDIR /go/src/github.com/minhajuddinkhan/reviewzone/comments
 RUN go get
 RUN go install github.com/minhajuddinkhan/reviewzone/comments/bin/comments
 
+
+#This entry point should be used in prod environment
 # Run the outyet command by default when the container starts.
-ENTRYPOINT /go/bin/comments
+#ENTRYPOINT /go/bin/comments
 
 # Document that the service listens on port 8080.
 EXPOSE 3000
+
+CMD [ "go", "run", "/go/src/github.com/minhajuddinkhan/reviewzone/comments/bin/comments/main.go" ]

@@ -11,7 +11,9 @@ RUN go install github.com/minhajuddinkhan/reviewzone/reviewer/bin/reviewer
 
 
 # Run the outyet command by default when the container starts.
-ENTRYPOINT /go/bin/reviewer
+#ENTRYPOINT /go/bin/reviewer
 
 # Document that the service listens on port 8080.
 EXPOSE 5000
+
+CMD [ "go", "run", "/go/src/github.com/minhajuddinkhan/reviewzone/reviewer/bin/reviewer/main.go" ]
