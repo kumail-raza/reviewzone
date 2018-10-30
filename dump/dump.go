@@ -1,13 +1,6 @@
 package dump
 
 import (
-	"context"
-	"errors"
-	"fmt"
-	"log"
-	"net/rpc"
-	"time"
-
 	"github.com/globalsign/mgo/bson"
 )
 
@@ -59,50 +52,18 @@ func (d *Dumper) readCSVFromDB() ([]Format, error) {
 
 }
 
-func (d *Dumper) readWithComments(csvID string) (FormatWithComments, error) {
+func (d *Dumper) readOneCSV(csvID string) (Format, error) {
 
-	ctx, cancel := context.WithTimeout(context.Background(), 2*time.Second)
-	defer cancel()
+	f := Format{}
 	s, err := d.connectDB()
-	var f FormatWithComments
 	if err != nil {
 		return f, err
 	}
 	defer s.Close()
 	c := s.DB(dbName).C(collection)
-
-	serviceCH := make(chan *rpc.Client)
-	errCh := make(chan error)
-
-	go func() {
-		service, err := rpc.DialHTTP("tcp", "comments:3000")
-		if err != nil {
-			errCh <- err
-			log.Fatal(err)
-		}
-		serviceCH <- service
-
-	}()
-
 	err = c.FindId(bson.ObjectIdHex(csvID)).One(&f)
 	if err != nil {
 		return f, err
 	}
-	fmt.Println(f.Serial)
-	var comments []Comment
-	select {
-	case s := <-serviceCH:
-		err = s.Call("Service.GetComments", f.ID.Hex(), &comments)
-		if err != nil {
-			fmt.Println("Coudn't get comments", err.Error())
-		}
-		f.Comments = comments
-		return f, nil
-
-	case err := <-errCh:
-		return f, err
-	case <-ctx.Done():
-		return f, errors.New("dump service timed out")
-	}
-
+	return f, nil
 }

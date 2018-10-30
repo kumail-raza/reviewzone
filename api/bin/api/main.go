@@ -53,12 +53,13 @@ func main() {
 
 	rt := mux.NewRouter()
 	rt.HandleFunc("/comments", api.PostComments(cmtService)).Methods("POST")
-	rt.HandleFunc("/comments", api.GetComments(cmtService)).Methods("GET")
+	rt.HandleFunc("/comments/{csv}", api.GetComments(cmtService)).Methods("GET")
 
-	rt.HandleFunc("/dump/what", api.DumpCSV(readerService, dumpService)).Methods("GET")
-	rt.HandleFunc("/csvs", api.ReadCSV(readerService)).Methods("GET")
-	rt.HandleFunc("/db/csv/{csvid}", api.ReadCSVWithComments(dumpService)).Methods("GET")
-	rt.HandleFunc("/db/csvs", api.ReadCSVFromDB(dumpService)).Methods("GET")
+	rt.HandleFunc("/file/csvs", api.ReadCSV(readerService)).Methods("GET")
+	rt.HandleFunc("/dump", api.DumpCSV(readerService, dumpService)).Methods("GET")
+
+	rt.HandleFunc("/csv/{csvid}", api.ReadCSVWithComments(dumpService, cmtService)).Methods("GET")
+	rt.HandleFunc("/csvs", api.ReadCSVFromDB(dumpService)).Methods("GET")
 
 	log.Fatal(http.ListenAndServe(":6000", rt))
 

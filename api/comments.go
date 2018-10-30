@@ -5,7 +5,9 @@ import (
 	"net/http"
 	"net/rpc"
 
-	"github.com/darahayes/go-boom"
+	boom "github.com/darahayes/go-boom"
+	"github.com/gorilla/mux"
+
 	"github.com/minhajuddinkhan/reviewzone/comments"
 )
 
@@ -19,7 +21,7 @@ type CommentRequest struct {
 func GetComments(cmtService *rpc.Client) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
-		csvID := r.URL.Query().Get("csv")
+		csvID := mux.Vars(r)["csv"]
 		if csvID == "" {
 			boom.NotFound(w, "csv id not found.")
 			return

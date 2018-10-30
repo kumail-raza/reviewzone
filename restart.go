@@ -16,6 +16,7 @@ const (
 )
 
 func restartContainer(cName string) error {
+	fmt.Println("restarting" + cName)
 	_, err := exec.Command("docker", "restart", cName).Output()
 	if err != nil {
 		return err
@@ -61,8 +62,16 @@ func main() {
 		time.Sleep(1 * time.Second)
 		handleError(restartContainer("reviewzone_api"))
 
+	case "all":
+		fmt.Println(" restarting all")
+
+		handleError((restartContainer("reviewzone_comments")))
+		handleError(restartContainer("reviewzone_reviewer"))
+		handleError(restartContainer("reviewzone_dump"))
+		time.Sleep(1 * time.Second)
+		handleError(restartContainer("reviewzone_api"))
 	default:
-		fmt.Println("Invalid container.")
+		fmt.Println("Invalid container,")
 	}
 
 }

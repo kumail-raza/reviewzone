@@ -1,33 +1,34 @@
 package api
 
 import (
-	"fmt"
 	"net/http"
 	"net/rpc"
+	"sync"
 
+	boom "github.com/darahayes/go-boom"
 	"github.com/gorilla/mux"
 
-	"github.com/darahayes/go-boom"
 	"github.com/globalsign/mgo/bson"
 )
 
 type ResponseCSV struct {
-	ID      bson.ObjectId
+	ID      bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Serial  string
 	Name    string
 	Details string
 }
-type ResponseComent struct {
+type ResponseComment struct {
 	ID      bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Comment string
 	CsvID   bson.ObjectId
 }
+
 type ResponseCSVWithComments struct {
-	ID       bson.ObjectId
+	ID       bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Serial   string
 	Name     string
 	Details  string
-	Comments []ResponseComent
+	Comments []ResponseComment
 }
 
 //DumpCSV DumpCSV
@@ -80,18 +81,49 @@ func ReadCSVFromDB(dumpService *rpc.Client) http.HandlerFunc {
 }
 
 //ReadCSVWithComments ReadCSVWithComments
-func ReadCSVWithComments(dumpService *rpc.Client) http.HandlerFunc {
+func ReadCSVWithComments(dumpService, commentService *rpc.Client) http.HandlerFunc {
 
 	return func(w http.ResponseWriter, r *http.Request) {
 
-		fmt.Println("HERE")
-		v := mux.Vars(r)
-		var fc ResponseCSVWithComments
-		err := dumpService.Call("Service.ReadCSVWithComments", v["csvid"], &fc)
-		if err != nil {
-			boom.BadGateway(w, err.Error())
+		csvID := mux.Vars(r)["csvid"]
+
+		var wg sync.WaitGroup
+
+		var csv ResponseCSV
+		var comments []ResponseComment
+		var rpcError error
+
+		wg.Add(2)
+		go func() {
+			err := dumpService.Call("Service.ReadOneCSV", csvID, &csv)
+			if err != nil {
+				rpcError = err
+			}
+			wg.Done()
+
+		}()
+
+		go func() {
+			err := commentService.Call("Service.GetComments", csvID, &comments)
+			if err != nil {
+				rpcError = err
+			}
+			wg.Done()
+		}()
+
+		wg.Wait()
+
+		if rpcError != nil {
+			boom.BadGateway(w, rpcError.Error())
+			return
 		}
-		Respond(w, fc)
+
+		Respond(w, ResponseCSVWithComments{
+			ID:       csv.ID,
+			Serial:   csv.Serial,
+			Name:     csv.Name,
+			Comments: comments,
+		})
 
 	}
 

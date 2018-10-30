@@ -26,14 +26,13 @@ func (ds *Service) ReadCSVFromDB(in string, out *[]Format) error {
 	return nil
 }
 
-//ReadCSVWithComments ReadCSVWithComments
-func (ds *Service) ReadCSVWithComments(in string, out *FormatWithComments) error {
+func (ds *Service) ReadOneCSV(in string, out *Format) error {
 
 	d := Dumper{}
-	fc, err := d.readWithComments(in)
+	csv, err := d.readOneCSV(in)
 	if err != nil {
 		return err
 	}
-	*out = fc
+	*out = csv
 	return nil
 }
