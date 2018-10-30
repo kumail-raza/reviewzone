@@ -7,6 +7,7 @@ services:
             - 27017:27017
 
     comments:
+        container_name: reviewzone_comments
         build: './comments'
         # ports:
         #     - 3000:3000
@@ -14,6 +15,7 @@ services:
             - ./comments:/go/src/github.com/minhajuddinkhan/reviewzone/comments
 
     dump:
+        container_name: reviewzone_dump
         build: './dump'
         # ports:
         #     - 4000:4000
@@ -21,6 +23,7 @@ services:
             - ./dump:/go/src/github.com/minhajuddinkhan/reviewzone/dump
  
     reviewer:
+        container_name: reviewzone_reviewer
         build: './reviewer'
         volumes: 
             - ./reviewer:/go/src/github.com/minhajuddinkhan/reviewzone/reviewer
@@ -29,6 +32,7 @@ services:
 
     api:
         build: '.'
+        container_name: reviewzone_api
         volumes: 
             - ./api:/go/src/github.com/minhajuddinkhan/reviewzone/api
         depends_on:
