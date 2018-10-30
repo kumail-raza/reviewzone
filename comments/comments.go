@@ -52,6 +52,7 @@ func (c *Comment) addOnCSV(csvID string, comments ...string) ([]string, error) {
 //GetComments GetComments
 func (c *Comment) getComments(csvID string) ([]Comment, error) {
 
+	fmt.Println("YOLO", csvID)
 	if !bson.IsObjectIdHex(csvID) {
 		return nil, errors.New("Invalid object id")
 	}

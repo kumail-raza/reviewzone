@@ -84,7 +84,6 @@ func (d *Dumper) readWithComments(csvID string) (FormatWithComments, error) {
 
 	}()
 
-	fmt.Println("cool here", csvID)
 	err = c.FindId(bson.ObjectIdHex(csvID)).One(&f)
 	if err != nil {
 		return f, err
@@ -93,9 +92,9 @@ func (d *Dumper) readWithComments(csvID string) (FormatWithComments, error) {
 	var comments []Comment
 	select {
 	case s := <-serviceCH:
-		err = s.Call("Service.GetComments", f.ID, &comments)
+		err = s.Call("Service.GetComments", f.ID.Hex(), &comments)
 		if err != nil {
-			fmt.Println("Coudn't get comments")
+			fmt.Println("Coudn't get comments", err.Error())
 		}
 		f.Comments = comments
 		return f, nil
